@@ -1,0 +1,75 @@
+<html>
+    <head>
+        <script>
+
+            function getUri() {
+                if (location.search) {
+                    const urlParams = new URLSearchParams(location.search);
+                    return urlParams.get('uri') || '';
+                }
+                return '';
+            }
+
+            function isIOSDevice() {
+                return !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+            }
+
+            function handleIos() {
+                const uri = getUri();
+                setTimeout(function () {
+                    window.location = 'https://apps.apple.com/au/app/macquarie-mobile-banking/id942349750';
+                }, 3000);
+
+                if (window.location.host.indexOf('lab.macquarie.com.au') > -1 ||
+                    window.location.host.indexOf('sit.macquarie.com.au') > -1 ||
+                    window.location.host.indexOf('uat.macquarie.com.au') > -1 ||
+                    window.location.host.indexOf('dev.macquarie.com.au') > -1) {
+
+                    window.location = `macquarie-debug://${uri}`;
+
+                } else if (window.location.host.indexOf('beta.macquarie.com.au') > -1) {
+                    window.location = `macquarie-beta://${uri}`;
+                } else {
+                    window.location = `macquarie://${uri}`;
+                }
+            }
+
+            function isAndroidDevice() {
+                let userAgent = navigator.userAgent.toLowerCase();
+                return userAgent.indexOf("android") > -1;
+            }
+
+            function addMeta(url) {
+                let meta = document.createElement('meta');
+                meta.httpEquiv = 'refresh';
+                meta.content = `1;URL='${url}'`;
+                document.getElementsByTagName('head')[0].appendChild(meta);
+            }
+
+            function handleAndroid() {
+                const uri = getUri();
+                // default to prod url
+                let url = `intent://${uri}#Intent;scheme=macquarie;package=au.com.macquarie.banking;end`;
+                if (window.location.host.indexOf('lab.macquarie.com.au') > -1 ||
+                    window.location.host.indexOf('sit.macquarie.com.au') > -1 ||
+                    window.location.host.indexOf('uat.macquarie.com.au') > -1 ||
+                    window.location.host.indexOf('dev.macquarie.com.au') > -1) {
+                    url = `intent://${uri}#Intent;scheme=macquarie-debug;package=au.com.macquarie.banking.debug;end`;
+                } else if (window.location.host.indexOf('beta.macquarie.com.au') > -1) {
+                    url = `intent://${uri}#Intent;scheme=macquarie-beta;package=au.com.macquarie.banking.beta;end`;
+                }
+                addMeta(url);
+            }
+
+            if (isAndroidDevice()) {
+                handleAndroid();
+            } else if (isIOSDevice()) {
+                handleIos();
+            } else {
+                window.location = 'https://www.macquarie.com.au/digital-banking/macquarie-app.html';
+            }
+
+        </script>
+    </head>
+
+</html>
