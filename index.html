@@ -16,8 +16,11 @@
 
             function handleIos() {
                 const uri = getUri();
+                let navigated = false; // ios seems to queue navigation, so if we wait more than 3000ms, it opens the app, then redirects to the app store
                 setTimeout(function () {
-                    window.location = 'https://apps.apple.com/au/app/macquarie-mobile-banking/id942349750';
+                    if (!navigated) {
+                        window.location = 'https://apps.apple.com/au/app/macquarie-mobile-banking/id942349750';
+                    }
                 }, 3000);
 
                 if (window.location.host.indexOf('lab.macquarie.com.au') > -1 ||
@@ -26,11 +29,14 @@
                     window.location.host.indexOf('dev.macquarie.com.au') > -1) {
 
                     window.location = `macquarie-debug://${uri}`;
+                    navigated = true;
 
                 } else if (window.location.host.indexOf('beta.macquarie.com.au') > -1) {
                     window.location = `macquarie-beta://${uri}`;
+                    navigated = true;
                 } else {
                     window.location = `macquarie://${uri}`;
+                    navigated = true;
                 }
             }
 
@@ -45,6 +51,8 @@
                 meta.content = `1;URL='${url}'`;
                 document.getElementsByTagName('head')[0].appendChild(meta);
             }
+
+            //
 
             function handleAndroid() {
                 const uri = getUri();
