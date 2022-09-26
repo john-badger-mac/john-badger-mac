@@ -74,14 +74,12 @@
             } else if (isIOSDevice()) {
                 handleIos();
             } else {
-                window.location = 'https://www.macquarie.com.au/digital-banking/macquarie-app.html';
+                const uri = getUri();
+                alert(uri);
+                // window.location = 'https://www.macquarie.com.au/digital-banking/macquarie-app.html';
             }
 
         </script>
     </head>
-
-    <body>
-        version  2
-    </body>
 
 </html>
