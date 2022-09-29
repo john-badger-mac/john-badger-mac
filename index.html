@@ -56,15 +56,15 @@
 
             function handleAndroid() {
                 const uri = getUri();
-                // default to prod url
-                let url = `intent://${uri}#Intent;scheme=macquarie;package=au.com.macquarie.banking;end`;
+                // default to prod url DEBUG NOW
+                let url = `intent://${uri}#Intent;scheme=macquarie-debug;package=au.com.macquarie.banking.debug;end`;
                 if (window.location.host.indexOf('lab.macquarie.com.au') > -1 ||
                     window.location.host.indexOf('sit.macquarie.com.au') > -1 ||
                     window.location.host.indexOf('uat.macquarie.com.au') > -1 ||
                     window.location.host.indexOf('dev.macquarie.com.au') > -1) {
                     url = `intent://${uri}#Intent;scheme=macquarie-debug;package=au.com.macquarie.banking.debug;end`;
                 } else if (window.location.host.indexOf('beta.macquarie.com.au') > -1) {
-                    url = `intent://${uri}#Intent;scheme=macquarie-beta;package=au.com.macquarie.banking.beta;end`;
+                    url = `intent://${uri}#Intent;scheme=macquarie-beta;package=au.com.macquarie;end`;
                 }
                 addMeta(url);
             }
@@ -74,7 +74,6 @@
             } else if (isIOSDevice()) {
                 handleIos();
             } else {
-                const uri = getUri();
                 window.location = 'https://www.macquarie.com.au/digital-banking/macquarie-app.html';
             }
 
